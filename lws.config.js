@@ -5,16 +5,8 @@ module.exports = {
   logFormat: "dev",
   rewrite: [
     {
-      from: "/api/v2/(.*)",
-      to: "https://test.swagger.print2block.in/$1",
-    },
-    {
-      from: "/ipfs/(.*)",
-      to: "https://test.view.print2block.in/ipfs/$1",
-    },
-    {
-      from: "/api/sign/(.*)",
-      to: "https://pdfsign.test.print2block.in/$1",
-    },
+      from: "/api/(.*)",
+      to: "http://127.0.0.1:7500/$1",
+    }
   ],
 }
