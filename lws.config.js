@@ -5,7 +5,7 @@ module.exports = {
   logFormat: "dev",
   rewrite: [
     {
-      from: "/api/(.*)",
+      from: "/bookApi/(.*)",
       to: "http://127.0.0.1:7500/$1",
     }
   ],

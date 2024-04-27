@@ -6,6 +6,7 @@
   import { parseJWT } from "../Scripts/token"
   import { onMount } from "svelte"
   import ApplicationState from "../../stores/applicationStates"
+  import notify from "../../Pages/shared/Notification/script/notify"
 
   let showPassword
 
@@ -53,27 +54,66 @@
       $ApplicationState = {}
     }
   }
+  /**
+   * Function for submitting the login details
+   */
+  const onLogin = async (e) => {
+    // Close the login notification, if it exists.
+    loginNotification.close()
+
+    // Create a new FormData object from the form data.
+    const formData = new FormData(e.target)
+
+    // Convert the FormData object to a JSON object using the formdata2json function.
+    const inputData = formdata2json(formData)
+
+    try {
+      // Show a loading indicator while waiting for the response.
+      showloading = true
+
+      const { data } = await axios.post("/bookApi/admin/signup", inputData, {
+        // Set a timeout of 5000 milliseconds (5 seconds) for the request.
+        timeout: 5000,
+      })
+      if (data.error && !data.success) {
+        // Throw the error code if the response indicates an error.
+        throw data.errorCode
+      }
+      console.log({ data })
+      // Save the authentication token received from the server in the application state.
+      $ApplicationState.token = data.token
+      $ApplicationState.tokenhmac = sha256(data.token).toString()
+      $ApplicationState.showExpiryNotification = false
+
+      // Create a success notification to inform the user about successful login.
+      loginNotification = notify.success("You have successfully logged in.")
+      // push("/home")
+    } catch (error) {
+      console.error(error)
+      loginNotification = notify.danger(error)
+    } finally {
+      // After completing the login process (whether successful or not),
+      // hide the loading indicator.
+      showloading = false
+    }
+  }
 </script>
 
-<div class="relative flex h-screen w-screen overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black">
+<div class="object_cover relative flex h-screen w-screen overflow-hidden object-contain" style="background-image: url(assets/img/bg_img.png);">
+  <!-- <div class="relative flex h-screen w-screen overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black"> -->
   <div class=" h-full w-full select-none">
     <!-- login form -->
-    <div class="mobile:inset-auto mobile:left-0 mobile:w-[500px] mobile:p-0 absolute inset-0 flex h-full items-center bg-black/60 p-5">
-      <!-- <div
-      class="absolute inset-0 flex h-full items-center bg-black/60 p-5 mobile:inset-auto mobile:left-auto mobile:right-0 mobile:w-[500px] mobile:p-0"
-    > -->
-      <div class="mobile:h-full mobile:items-start mobile:justify-start mobile:rounded-none mobile:p-16 flex w-full flex-col rounded-2xl bg-transparent p-5">
-        
+    <div class="absolute inset-0 flex h-full items-center bg-black/90 p-5 mobile:inset-auto mobile:right-0 mobile:w-[500px] mobile:p-0">
+      <div class="flex w-full flex-col rounded-2xl bg-transparent p-5 mobile:h-full mobile:items-start mobile:justify-start mobile:rounded-none mobile:p-16">
         <!-- heading  -->
-        <div class="mobile:items-start mobile:justify-start flex items-center justify-center">
+        <div class="flex items-center justify-center mobile:items-start mobile:justify-start">
           <h1 class="mb-10 text-2xl font-bold text-white">Login</h1>
         </div>
 
         <form class="flex w-full flex-col items-center justify-center" on:submit|preventDefault={onLogin}>
           <div class="w-full">
-            <!-- <p class="mb-2 text-sm text-white">Email Address</p> -->
             <div class="group">
-              <div class=" mobile:mb-10 relative mb-3 w-full border-b-2 border-gray-500 group-focus-within:border-blue-500">
+              <div class=" relative mb-3 w-full border-b-2 border-gray-500 group-focus-within:border-blue-500 mobile:mb-10">
                 <input name="email" required="true" type="email" value="admin@email.com" class="w-full rounded-md border border-none bg-transparent pl-8 text-white focus:ring-0" placeholder="Email" />
                 <div class="absolute inset-y-0 left-0 flex aspect-square items-center text-gray-500 group-focus-within:text-blue-500">
                   <i class="fa-solid fa-envelope" />
@@ -81,14 +121,12 @@
               </div>
             </div>
 
-            <!-- <p class="mb-2 text-sm text-white">Password</p> -->
             <div class="group">
-              <div class="mobile:mb-10 group relative mb-3 w-full border-b-2 border-gray-500 group-focus-within:border-blue-500">
+              <div class="group relative mb-3 w-full border-b-2 border-gray-500 group-focus-within:border-blue-500 mobile:mb-10">
                 <input bind:this={passwordField} bind:value={passwordValue} name="password" type="password" class="w-full rounded-md border-none bg-transparent pl-8 text-white focus:ring-0" placeholder="Password" />
                 <div class="absolute inset-y-0 left-0 flex aspect-square items-center text-gray-500 focus:bg-blue-500 group-focus-within:text-blue-500">
                   <i class="fa-regular fa-key fa-rotate-270" />
                 </div>
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <button
                   type="button"
                   on:click={() => {
@@ -107,7 +145,7 @@
               </div>
             </div>
 
-            <div class="mobile:mt-0 mt-6 flex w-full items-center justify-center">
+            <div class="mt-6 flex w-full items-center justify-center mobile:mt-0">
               {#if showloading}
                 <span class="text-white">Logging in&ensp;</span>
                 <svg width="20" height="7" stroke="#8087BD" fill="#8087BD" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
@@ -116,7 +154,7 @@
                   <circle class="circle2" cx="105" cy="15" r="15" />
                 </svg>
               {:else}
-                <button type="submit" class="mobile:w-2/6 w-full rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none">
+                <button type="submit" class="w-full rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none mobile:w-2/6">
                   <i class="fa-solid fa-right-to-bracket" />
                   &nbsp;Login
                 </button>
@@ -126,17 +164,12 @@
         </form>
       </div>
     </div>
-
-    <!-- footer -->
-    <div class="mobile:left-0 mobile:bottom-8 mobile:w-[500px] absolute bottom-8 flex w-full select-none items-center justify-center">
-      <!-- <div
-      class="absolute bottom-8 flex w-full select-none items-center justify-center mobile:right-0 mobile:bottom-8 mobile:w-[500px]"
-    > -->
-      <p class="text-center text-base text-white">
-        &copy; {new Date().getFullYear()} Print2Block.com, Inc.
-        <br />
-        All rights reserved.
-      </p>
-    </div>
   </div>
 </div>
+
+<style>
+  .object_cover {
+    background-size: contain;
+    background-position: center;
+  }
+</style>
