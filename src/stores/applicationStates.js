@@ -2,7 +2,7 @@ import { writable } from "svelte/store"
 /**
  * @type {ApplicationState}
  */
-let storedApplicationState = localStorage.getItem("P2BADMINPANEL")
+let storedApplicationState = localStorage.getItem("BOOKMYSHOW")
 if (typeof storedApplicationState != "Object") {
   try {
     storedApplicationState = JSON.parse(storedApplicationState)
@@ -43,7 +43,7 @@ if (typeof storedApplicationState != "Object") {
 const ApplicationState = writable(storedApplicationState)
 
 ApplicationState.subscribe((value) => {
-  localStorage.setItem("P2BADMINPANEL", JSON.stringify(value))
+  localStorage.setItem("BOOKMYSHOW", JSON.stringify(value))
 })
 
 export default ApplicationState

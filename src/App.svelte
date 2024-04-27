@@ -4,7 +4,9 @@
   import NotificationSystem from "./Pages/shared/Notification/index.svelte"
   import ApplicationState from "./stores/applicationStates"
   import {onMount} from "svelte"
-
+  import { push } from "svelte-spa-router"
+  import { parseJWT } from "./Pages/Scripts/token"
+  import sha256 from "crypto-js/sha256"
 
   onMount(() => {
     const load = document.getElementById("mainLoader")

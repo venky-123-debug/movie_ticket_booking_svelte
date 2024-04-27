@@ -45,9 +45,10 @@
       // console.log({ parsedJwt })
       if (Date.now() > parsedJwt.exp * 1000 || Date.now() - parsedJwt.iat * 1000 > 86400000) {
         throw "Token expired"
-      } else {
-        push("/home")
-      }
+      } 
+      // else {
+      //   push("#/addNewMovie")
+      // }
     } catch (error) {
       console.error(error)
       notify.danger(error)
@@ -72,6 +73,7 @@
       showloading = true
 
       let data = await logIn(inputData)
+      console.log({data});
       // Save the authentication token received from the server in the application state.
       $ApplicationState.token = data.token
       $ApplicationState.tokenhmac = sha256(data.token).toString()
@@ -96,7 +98,7 @@
         if(!window.navigator.onLine) reject("Network error")
         let { data } = await axios.post(`/bookApi/admin/login`, inputData, {})
         if (data.error) throw data.errorCode
-        resolve(data.data)
+        resolve(data)
       } catch (error) {
         reject(error)
       }
