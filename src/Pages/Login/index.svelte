@@ -79,7 +79,7 @@
 
       // Create a success notification to inform the user about successful login.
       loginNotification = notify.success("You have successfully logged in.")
-      // push("/home")
+      push("/addNewMovie")
     } catch (error) {
       console.error(error)
       loginNotification = notify.danger(error)
@@ -123,7 +123,7 @@
           <div class="w-full">
             <div class="group">
               <div class=" relative mb-3 w-full rounded-md border border-gray-500 px-2 group-focus-within:border-blue-500 mobile:mb-10">
-                <input name="email" required="true" type="email" value="admin@email.com" class="w-full rounded-md border border-none bg-transparent pl-8 text-white focus:ring-0" placeholder="Email" />
+                <input name="email" required="true" type="email" value="admin@email.com" class="w-full rounded-md border border-none bg-transparent pl-8 text-gray-200 focus:ring-0" placeholder="Email" />
                 <div class="absolute inset-y-0 left-2 flex aspect-square items-center text-gray-500 group-focus-within:text-blue-500">
                   <i class="fa-solid fa-envelope" />
                 </div>
@@ -132,7 +132,7 @@
 
             <div class="group">
               <div class="group relative mb-3 w-full rounded-md border border-gray-500 px-2 group-focus-within:border-blue-500 mobile:mb-10">
-                <input bind:this={passwordField} bind:value={passwordValue} name="password" type="password" class="w-full border-none bg-transparent pl-8 text-white focus:ring-0" placeholder="Password" />
+                <input bind:this={passwordField} bind:value={passwordValue} name="password" type="password" class="w-full border-none bg-transparent pl-8 text-gray-200 focus:ring-0" placeholder="Password" />
                 <div class="absolute inset-y-0 left-2 flex aspect-square items-center text-gray-500 focus:bg-blue-500 group-focus-within:text-blue-500">
                   <i class="fa-regular fa-key fa-rotate-270" />
                 </div>
