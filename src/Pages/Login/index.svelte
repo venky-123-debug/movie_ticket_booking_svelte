@@ -71,15 +71,7 @@
       // Show a loading indicator while waiting for the response.
       showloading = true
 
-      const { data } = await axios.post("/bookApi/admin/signup", inputData, {
-        // Set a timeout of 5000 milliseconds (5 seconds) for the request.
-        timeout: 5000,
-      })
-      if (data.error && !data.success) {
-        // Throw the error code if the response indicates an error.
-        throw data.errorCode
-      }
-      console.log({ data })
+      let data = await logIn(inputData)
       // Save the authentication token received from the server in the application state.
       $ApplicationState.token = data.token
       $ApplicationState.tokenhmac = sha256(data.token).toString()
@@ -97,14 +89,31 @@
       showloading = false
     }
   }
+
+  const logIn = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if(!window.navigator.onLine) reject("Network error")
+        let { data } = await axios.post(`/bookApi/admin/login`, inputData, {})
+        if (data.error) throw data.errorCode
+        resolve(data.data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
 </script>
 
 <div class="object_cover relative flex h-screen w-screen overflow-hidden object-contain" style="background-image: url(assets/img/bg_img.png);">
   <!-- <div class="relative flex h-screen w-screen overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black"> -->
-  <div class=" h-full w-full select-none">
+  <div class=" flex  w-full select-none items-center justify-center m-20">
     <!-- login form -->
-    <div class="absolute inset-0 flex h-full items-center bg-black/90 p-5 mobile:inset-auto mobile:right-0 mobile:w-[500px] mobile:p-0">
-      <div class="flex w-full flex-col rounded-2xl bg-transparent p-5 mobile:h-full mobile:items-start mobile:justify-start mobile:rounded-none mobile:p-16">
+    <div class="absolute inset-0 m-5 md:m-auto flex min-h-[60%] h-[60%] rounded-md items-center justify-center bg-black/90 p-5 mobile:w-[450px] mobile:p-0">
+      <div class="flex w-full flex-col rounded-2xl bg-transparent p-5 ">
+        <div class="flex items-center justify-center ">
+          <h1 class="mb-10 text-4xl font-bold text-white">Admin</h1>
+        </div>
+
         <!-- heading  -->
         <div class="flex items-center justify-center mobile:items-start mobile:justify-start">
           <h1 class="mb-10 text-2xl font-bold text-white">Login</h1>
@@ -113,18 +122,18 @@
         <form class="flex w-full flex-col items-center justify-center" on:submit|preventDefault={onLogin}>
           <div class="w-full">
             <div class="group">
-              <div class=" relative mb-3 w-full border-b-2 border-gray-500 group-focus-within:border-blue-500 mobile:mb-10">
+              <div class=" relative mb-3 w-full rounded-md border border-gray-500 px-2 group-focus-within:border-blue-500 mobile:mb-10">
                 <input name="email" required="true" type="email" value="admin@email.com" class="w-full rounded-md border border-none bg-transparent pl-8 text-white focus:ring-0" placeholder="Email" />
-                <div class="absolute inset-y-0 left-0 flex aspect-square items-center text-gray-500 group-focus-within:text-blue-500">
+                <div class="absolute inset-y-0 left-2 flex aspect-square items-center text-gray-500 group-focus-within:text-blue-500">
                   <i class="fa-solid fa-envelope" />
                 </div>
               </div>
             </div>
 
             <div class="group">
-              <div class="group relative mb-3 w-full border-b-2 border-gray-500 group-focus-within:border-blue-500 mobile:mb-10">
-                <input bind:this={passwordField} bind:value={passwordValue} name="password" type="password" class="w-full rounded-md border-none bg-transparent pl-8 text-white focus:ring-0" placeholder="Password" />
-                <div class="absolute inset-y-0 left-0 flex aspect-square items-center text-gray-500 focus:bg-blue-500 group-focus-within:text-blue-500">
+              <div class="group relative mb-3 w-full rounded-md border border-gray-500 px-2 group-focus-within:border-blue-500 mobile:mb-10">
+                <input bind:this={passwordField} bind:value={passwordValue} name="password" type="password" class="w-full border-none bg-transparent pl-8 text-white focus:ring-0" placeholder="Password" />
+                <div class="absolute inset-y-0 left-2 flex aspect-square items-center text-gray-500 focus:bg-blue-500 group-focus-within:text-blue-500">
                   <i class="fa-regular fa-key fa-rotate-270" />
                 </div>
                 <button
@@ -145,7 +154,7 @@
               </div>
             </div>
 
-            <div class="mt-6 flex w-full items-center justify-center mobile:mt-0">
+            <div class="mt-6 flex w-full items-center h-10 justify-center mobile:mt-0">
               {#if showloading}
                 <span class="text-white">Logging in&ensp;</span>
                 <svg width="20" height="7" stroke="#8087BD" fill="#8087BD" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">

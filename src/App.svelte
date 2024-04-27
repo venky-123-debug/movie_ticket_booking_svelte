@@ -37,4 +37,19 @@
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
+
+  @layer base {
+    html {
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
+  body {
+    font-family: "Nunito", sans-serif;
+  }
+  .formInput {
+    @apply w-full rounded-md border-none bg-transparent text-white focus:ring-0
+    /* @apply block w-full appearance-none rounded-md border border-[#a0a1a580] px-3 py-[0.47rem] text-formInput font-normal text-gray-400 focus:border-blue-500 focus:bg-transparent focus:outline-none focus:ring-0; */
+  }
+
+
 </style>
