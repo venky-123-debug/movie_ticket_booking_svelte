@@ -1,6 +1,11 @@
 <script>
   import { formdata2json } from "../Scripts/utilities"
+  import Upload from "../shared/upload.svelte"
+  let directorImage
+  let moviePoster
   const onSubmit = (e) => {
+    directorImage = directorImage[0]
+    console.log(directorImage[0])
     const movieFormData = new FormData(e.target)
 
     const inputData = formdata2json(movieFormData)
@@ -9,8 +14,8 @@
 </script>
 
 <div class="flex h-screen w-screen justify-center overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black">
-  <div class="flex w-[70%] justify-start">
-    <div class="w-full overflow-auto px-6 pb-6">
+  <div class="flex w-full justify-start">
+    <div class="w-full overflow-auto px-32 pb-10">
       <div class="mx-auto mt-6 h-auto w-full rounded-md bg-black/60 p-6">
         <form action="post" class="space-y-3" on:submit|preventDefault={onSubmit}>
           <div class="flex w-full gap-3">
@@ -42,7 +47,26 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Release Date</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" required="true" name="releaseDate" type="date" class="formInput" placeholder="entermovie genre" />
+                  <input autocomplete="off" required="true" name="releaseDate" type="date" class="formInput" placeholder="enter movie genre" />
+                </div>
+              </div>
+              <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
+                <div class="formLabel">Director Name</div>
+                <div class="sm:col-span-2 sm:mt-0">
+                  <input autocomplete="off" required="true" name="director.name" type="text" value="Guy Ritchie" class="formInput" placeholder="enter director name" />
+                </div>
+              </div>
+
+              <div class="sm:grid sm:grid-cols-3 sm:items-start">
+                <label for="directorImage" class="formLabel">Upload Director Image</label>
+                <div class="sm:col-span-2 sm:mt-0">
+                  <Upload height="h-40" bind:files={directorImage} imageHeight="max-h-32" radius="rounded-md" position="top-0 right-0" />
+                </div>
+              </div>
+              <div class="sm:grid sm:grid-cols-3 sm:items-start">
+                <label for="moviePoster" class="formLabel">Upload Movie Poster</label>
+                <div class="sm:col-span-2 sm:mt-0">
+                  <Upload height="h-40" bind:files={moviePoster} imageHeight="max-h-32" radius="rounded-md" position="top-0 right-0" />
                 </div>
               </div>
             </div>

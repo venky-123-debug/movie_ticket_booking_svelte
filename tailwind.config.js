@@ -66,6 +66,7 @@ module.exports = {
           info: "#54B4D3",
           success: "#14A44D",
         },
+        borderClr:"#a0a1a533"
       },
       screens: {
         mobile: "500px",
