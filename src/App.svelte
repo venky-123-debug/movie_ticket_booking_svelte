@@ -49,8 +49,12 @@
     font-family: "Nunito", sans-serif;
   }
   .formInput {
-    @apply w-full rounded-md border border-[#a0a1a533] bg-transparent px-3 py-2 pl-5 text-sm text-gray-200 outline-none placeholder:font-normal placeholder:text-gray-100/50 invalid:border-red-500 invalid:placeholder-red-500 focus:border-blue-500 focus:ring-0 focus:invalid:border-red-500 focus:invalid:ring-red-500 sm:text-sm
+    @apply w-full rounded-md border border-[#a0a1a533] bg-transparent px-3 py-2 pl-5 text-sm text-gray-200 outline-none placeholder:font-normal placeholder:text-gray-100/50  focus:border-blue-500 focus:ring-0 sm:text-sm
     /* @apply block w-full appearance-none rounded-md border border-[#a0a1a580] px-3 py-[0.47rem] text-formInput font-normal text-gray-400 focus:border-blue-500 focus:bg-transparent focus:outline-none focus:ring-0; */
+  }
+
+  .formLabel {
+    @apply mb-1 block select-none text-base font-medium text-gray-200 sm:mb-0;
   }
 
 
