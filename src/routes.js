@@ -4,7 +4,7 @@ import AddNewMovie from "./Pages/AddMovies/index.svelte"
 
 export default {
   "/": Login,
-  "/addNewMovie": AddNewMovie,
+  "/Movies/AddNewMovie": AddNewMovie,
   
   // The catch-all route must always be last
   "*": ErrorCode404,

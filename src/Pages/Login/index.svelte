@@ -81,7 +81,7 @@
 
       // Create a success notification to inform the user about successful login.
       loginNotification = notify.success("You have successfully logged in.")
-      push("/addNewMovie")
+      push("/Movies/AddNewMovie")
     } catch (error) {
       console.error(error)
       loginNotification = notify.danger(error)

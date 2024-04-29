@@ -1,3 +1,10 @@
+<!-- <script>
+  import MainSlot from "../shared/sideBar/slot/mainSlot.svelte"
+</script>  
+  
+  <MainSlot /> -->
+  
+  
   <div class="flex items-center justify-center h-screen w-screen overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black">
     <div class="flex items-center justify-start w-[70%]">
       <div class="w-full overflow-auto px-6 pb-6">
