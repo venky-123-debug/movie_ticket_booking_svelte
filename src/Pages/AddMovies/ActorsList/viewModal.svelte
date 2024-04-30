@@ -21,7 +21,7 @@
               <img class="inline-block aspect-square h-20 w-20 min-w-fit rounded-md" src={actor.imageBlob} alt="" />
             </div>
             <div class="">
-              <p class="text-sm font-semibold text-gray-700 group-hover:text-gray-900">{actor.actorName}</p>
+              <p class="text-sm font-semibold text-gray-700 group-hover:text-gray-900">{actor.name}</p>
               <div class="flex items-center gap-3">
                 <p class="text-xs font-medium text-gray-500 group-hover:text-gray-700">{role}</p>
                 <i class="fa-solid cursor-pointer fa-trash h-3 w-3 text-red-500" on:click|self={() => deleteActor(i)} />

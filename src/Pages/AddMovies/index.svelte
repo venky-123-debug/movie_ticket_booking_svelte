@@ -1,9 +1,11 @@
 <script>
+  import axios from "axios"
   import { formdata2json } from "../Scripts/utilities"
   import Upload from "../shared/upload.svelte"
   import notify from "../shared/Notification/script/notify"
   import AddItem from "../shared/addItem.svelte"
   import ViewModal from "./ActorsList/viewModal.svelte"
+  import ApplicationState from "../../stores/applicationStates"
 
   let directorImage = ""
   let moviePoster
@@ -25,29 +27,93 @@
   $: {
     console.log({ actors, language }, !actors.length)
   }
-  const onSubmit = (e) => {
-    try {
-      if (!actors.length) throw "Add atleast one actor details"
-      if (!directorImage.length) throw "Movie poster cannot be empty"
-      const movieFormData = new FormData(e.target)
-      const inputData = formdata2json(movieFormData)
-      inputData.actors = actors
-      let director = {
-        name: inputData.directorName,
-        image: directorImage[0],
-      }
-      inputData.director = director
-      inputData.language = language
-      inputData.genre = genre
-      delete inputData.directorName
-      console.log(directorImage)
-      console.log({ inputData })
-    } catch (error) {
-      console.error(error)
-      notify.danger(error)
-    }
-  }
+  // const onSubmit = async (e) => {
+  //   try {
+  //     if (!language.length) throw "Language cannot be empty"
+  //     if (!genre.length) throw "Genre cannot be empty"
+  //     if (!actors.length) throw "Add atleast one actor details"
+  //     if (!directorImage.length) throw "Movie poster cannot be empty"
+  //     const movieFormData = new FormData(e.target)
+  //     const inputData = formdata2json(movieFormData)
+  //     inputData.actors = actors
+  //     let director = {
+  //       name: inputData.directorName,
+  //       image: directorImage[0],
+  //     }
+  //     inputData.directorImage = directorImage[0]
+  //     inputData.director = director
+  //     inputData.language = language
+  //     inputData.genre = genre
+  //     delete inputData.directorName
+  //     console.log({ inputData })
+  //     let data = await addNewMovie(inputData)
+  //     console.log({ data })
+  //     console.log(directorImage)
+  //   } catch (error) {
+  //     console.error(error)
+  //     notify.danger(error)
+  //   }
+  // }
 
+  const onSubmit = async (e) => {
+  try {
+    if (!language.length) throw "Language cannot be empty"
+    if (!genre.length) throw "Genre cannot be empty"
+    if (!actors.length) throw "Add at least one actor details"
+    if (!directorImage.length) throw "Movie poster cannot be empty"
+
+    const movieFormData = new FormData();
+
+    // Add non-file inputs to FormData
+    movieFormData.append('title', e.target.movie.value);
+    movieFormData.append('description', e.target.description.value);
+    movieFormData.append('releaseDate', e.target.releaseDate.value);
+    movieFormData.append('directorName', e.target.directorName.value);
+
+    // Append language and genre arrays as strings
+    movieFormData.append('language', Array.from(language))
+    movieFormData.append('genre',  Array.from(genre));
+
+    // Append poster and directorImage files
+    movieFormData.append('poster', directorImage[0]);
+    movieFormData.append('directorImage', directorImage[0]);
+
+    // Append actor images
+    actors.forEach((actor) => {
+      movieFormData.append('actorImages', actor.image);
+    });
+
+    // Append actor details
+    movieFormData.append('actors', JSON.stringify(actors.map(actor => ({ name: actor.name }))));
+
+    console.log({ movieFormData });
+
+    let data = await addNewMovie(movieFormData);
+    console.log({ data });
+    console.log(directorImage);
+  } catch (error) {
+    console.error(error);
+    notify.danger(error);
+  }
+}
+
+ const addNewMovie = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!window.navigator.onLine) reject("Network error")
+        let { data } = await axios.post(`/bookApi/movie/newMovie`, inputData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "access-token": $ApplicationState.token,
+          },
+        })
+        if (data.error) throw data.errorCode
+        resolve(data)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
   const addActor = () => {
     try {
       if (!actorName) {
@@ -56,25 +122,18 @@
       if (!actorImage) {
         throw "Actor image cannot be empty"
       }
-      // let actorObject = { actorName: actorName, actorImage: actorImage[0], imageBlob: blob }
-
       actors.push({ name: actorName, image: actorImage[0], imageBlob: blob })
-
       actors = [...actors]
-      // actors = [...actors, actorObject]
-      console.log({ actors })
-
       actorName = ""
       actorImage = ""
-
-      // }
       blob = ""
-      console.log("!actors.length", !actors.length)
     } catch (error) {
       console.error(error)
       notify.danger(error)
     }
   }
+
+ 
 </script>
 
 <div class="relative z-10 flex h-screen w-screen justify-center overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black">
