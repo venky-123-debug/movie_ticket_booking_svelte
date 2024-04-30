@@ -4,7 +4,7 @@
   export let height
   export let position
   export let files
-  let blob
+  export let blob
   let loading = false
   export let imageHeight = "max-h-40 min-h-32"
 
@@ -51,7 +51,7 @@
     <form id="formImageEdit">
       <input bind:files type="file" name="userImage" class="absolute inset-0 cursor-pointer opacity-0" accept="image/*" />
     </form>
-    <div class="mb-1 text-center h-auto text-gray-500">
+    <div class="mb-1 h-auto text-center text-gray-500">
       <i class="fa-solid fa-image text-3xl" />
     </div>
     <p class="w-full p-2 text-center text-[13px] text-slate-700">
