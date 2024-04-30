@@ -1,11 +1,27 @@
 <script>
-  import { afterUpdate, createEventDispatcher } from "svelte"
+  import { createEventDispatcher } from "svelte"
   const dispatch = createEventDispatcher()
   let openModal = false
   let dropdown
-  export let activeItems = []
+  let activeItems = []
   export let Actions
   export let title = "Language"
+  const removeActiveItem = (activeItem, index) => {
+    // Check if activeItem is already present in Actions array
+    let actionIndex = Actions.indexOf(activeItem)
+    if (actionIndex === -1) {
+      // If not present, remove from activeItems and add to Actions
+      activeItems.splice(index, 1)
+      Actions.push(activeItem)
+    } else {
+      // If present, remove from Actions and add back to activeItems
+      Actions.splice(actionIndex, 1)
+      activeItems.push(activeItem)
+    }
+    // Update both arrays
+    activeItems = [...activeItems]
+    Actions = [...Actions]
+  }
 </script>
 
 <svelte:window
@@ -30,11 +46,11 @@
     }}
     class="group flex w-full"
   >
-    <button type="button" class="flex w-full flex-wrap items-center justify-start gap-3 break-words rounded-l border border-r-0 px-3 text-slate-600 {openModal ? 'border-blue-500' : 'border-borderClr'}">
+    <button type="button" class="flex w-full flex-wrap items-center justify-start gap-3 break-words rounded-l border border-r-0 px-3 {activeItems.length ? 'py-1.5' : ''} {openModal ? 'border-blue-500' : 'border-borderClr'}">
       {#if activeItems.length}
-        {#each activeItems as activeItem}
+        {#each activeItems as activeItem, i}
           <div class="">
-            <button type="button" class="rounded-md bg-blue-500 px-2 py-[0.4px] text-sm text-white">{activeItem}</button>
+            <button on:click|self={() => removeActiveItem(activeItem, i)} type="button" class="rounded-md bg-blue-500 px-2 py-[0.4px] text-sm text-white">{activeItem}</button>
           </div>
         {/each}
       {:else}
@@ -45,7 +61,7 @@
       <span />
     </button>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span class="cursor-pointer rounded-r border border-l-0 px-3 py-1.5 text-slate-400 {openModal ? 'border-blue-500' : 'border-borderClr'}">
+    <span class="cursor-pointer rounded-r border border-l-0 px-5 py-1.5 text-gray-400 {openModal ? 'border-blue-500' : 'border-borderClr'}">
       <i class="fa-sharp fa-play fa-rotate-by fa-xs" style="--fa-rotate-angle: 210deg;" />
     </span>
   </div>
@@ -61,7 +77,7 @@
             dispatch("dropdown", activeItems)
             openModal = false
           }}
-          class="hover:text-prbg-primary-default cursor-pointer p-3 text-sm font-normal text-slate-600 hover:bg-slate-100"
+          class="hover:text-prbg-primary-default cursor-pointer p-3 py-1.5 pl-2 text-sm text-gray-200 hover:bg-blue-500"
         >
           {Action}
         </ul>

@@ -14,10 +14,12 @@
   }
   let language = []
   let Actions = ["English", "Tamil", "Telugu", "Hindi", "Malayalam", "Kannada"]
-  let activeItems = []
+  let genreActions = ["Action","Romance", "Adventure", "Comedy", "Crime and mystery", "Fantasy", "Historical","Horror"]
+  let genre = []
+  // let activeItems = []
 
   $: {
-    console.log({ actorObject })
+    console.log({ actorObject,language})
   }
   const onSubmit = (e) => {
     try {
@@ -81,8 +83,7 @@
                 <div class="sm:col-span-2 sm:mt-0">
                   <!-- <input autocomplete="off" required="true" name="language" type="text" value="tamil,english,telugu" class="formInput" placeholder="enter languages available" /> -->
                   <AddItem
-                    {Actions}
-                    bind:activeItems
+                    bind:Actions
                     on:dropdown={(e) => {
                       language = e.detail
                     }}
@@ -93,7 +94,14 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Genre</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" required="true" name="genre" type="text" value="Crime, thriller, romance" class="formInput" placeholder="entermovie genre" />
+                  <!-- <input autocomplete="off" required="true" name="genre" type="text" value="Crime, thriller, romance" class="formInput" placeholder="entermovie genre" /> -->
+                  <AddItem
+                    Actions={genreActions}
+                    on:dropdown={(e) => {
+                      genre = e.detail
+                    }}
+                    title="Genre"
+                  />
                 </div>
               </div>
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
