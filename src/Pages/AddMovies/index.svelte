@@ -2,6 +2,8 @@
   import { formdata2json } from "../Scripts/utilities"
   import Upload from "../shared/upload.svelte"
   import notify from "../shared/Notification/script/notify"
+  import AddItem from "../shared/addItem.svelte"
+
   let directorImage
   let moviePoster
   let blob
@@ -10,6 +12,9 @@
     actorName: "Robert Downey Jr",
     actorImage: "",
   }
+  let language = []
+  let Actions = ["English", "Tamil", "Telugu", "Hindi", "Malayalam", "Kannada"]
+  let activeItems = []
 
   $: {
     console.log({ actorObject })
@@ -74,7 +79,15 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Languages available</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" required="true" name="language" type="text" value="tamil,english,telugu" class="formInput" placeholder="enter languages available" />
+                  <!-- <input autocomplete="off" required="true" name="language" type="text" value="tamil,english,telugu" class="formInput" placeholder="enter languages available" /> -->
+                  <AddItem
+                    {Actions}
+                    bind:activeItems
+                    on:dropdown={(e) => {
+                      language = e.detail
+                    }}
+                    title="Language"
+                  />
                 </div>
               </div>
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
