@@ -29,8 +29,8 @@
 
 <div class="relative flex {height} cursor-pointer flex-col items-center justify-center gap-3 {radius} {!blob ? 'border border-dashed hover:border-gray-200' : ''} border-borderClr bg-transparent">
   {#if loading}
-    <div in:slide class="absolute inset-0 flex h-full w-full items-center justify-center {radius} bg-violet-500">
-      <i class="fa-sharp fa-solid fa-circle-notch fa-spin flex h-7 w-7 items-center justify-center {radius} bg-[#000000cc] text-white" />
+    <div class="absolute inset-0 flex h-full w-full items-center justify-center {radius} bg-opacity-50 bg-blue-500">
+      <i class="fa-sharp fa-solid fa-circle-notch fa-spin flex h-8 w-8 items-center justify-center {radius}  text-white" />
     </div>
   {/if}
   {#if blob && !loading}

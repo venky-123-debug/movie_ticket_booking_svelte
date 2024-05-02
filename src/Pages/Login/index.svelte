@@ -80,8 +80,8 @@
       $ApplicationState.showExpiryNotification = false
 
       // Create a success notification to inform the user about successful login.
-      loginNotification = notify.success("You have successfully logged in.")
       push("/Movies/AddNewMovie")
+      loginNotification = notify.success("You have successfully logged in.")
     } catch (error) {
       console.error(error)
       loginNotification = notify.danger(error)

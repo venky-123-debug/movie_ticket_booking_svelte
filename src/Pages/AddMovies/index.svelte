@@ -287,13 +287,13 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Member Name</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" bind:value={crewMemberName} type="text" class="formInput" placeholder="enter actor name" />
+                  <input autocomplete="off" bind:value={crewMemberName} type="text" class="formInput" placeholder="enter member name" />
                 </div>
               </div>
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Member Role</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" bind:value={crewMemberRole} type="text" class="formInput" placeholder="enter actor name" />
+                  <input autocomplete="off" bind:value={crewMemberRole} type="text" class="formInput" placeholder="enter member name" />
                 </div>
               </div>
               <div class="sm:grid sm:grid-cols-3 sm:items-start">
