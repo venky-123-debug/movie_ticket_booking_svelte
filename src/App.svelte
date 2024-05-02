@@ -46,7 +46,8 @@
     }
   }
   body {
-    font-family: "Nunito", sans-serif;
+    /* font-family: "Nunito", sans-serif; */
+    font-family: "Ubuntu", sans-serif;
   }
   .formInput {
     @apply w-full rounded-md border border-[#a0a1a533] bg-transparent px-3 py-2 pl-5 text-sm text-gray-200 outline-none placeholder:font-normal placeholder:text-gray-100/50  focus:border-blue-500 focus:ring-0 sm:text-sm

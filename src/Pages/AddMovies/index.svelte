@@ -1,5 +1,6 @@
 <script>
   import axios from "axios"
+  import { push } from "svelte-spa-router"
   import { formdata2json } from "../Scripts/utilities"
   import Upload from "../shared/upload.svelte"
   import notify from "../shared/Notification/script/notify"
@@ -7,7 +8,6 @@
   import ViewModal from "./ActorsList/viewModal.svelte"
   import ApplicationState from "../../stores/applicationStates"
 
-  let directorImage = ""
   let moviePoster
   let blob
   let actors = []
@@ -33,54 +33,6 @@
   let addActorNotify = {
     close() {},
   }
-  $: {
-    console.log({ actors, language }, !actors.length)
-  }
-
-  // const onSubmit = async (e) => {
-  //   try {
-  //     movieNotification.close()
-  //     if (!language.length) throw "Language cannot be empty"
-  //     if (!genre.length) throw "Genre cannot be empty"
-  //     if (!actors.length) throw "Add at least one actor details"
-  //     if (!moviePoster.length) throw "Movie poster cannot be empty"
-
-  //     const movieFormData = new FormData()
-
-  //     // Add non-file inputs to FormData
-  //     movieFormData.append("title", e.target.movie.value)
-  //     movieFormData.append("description", e.target.description.value)
-  //     movieFormData.append("releaseDate", e.target.releaseDate.value)
-  //     movieFormData.append("duration", e.target.duration.value)
-
-  //     movieFormData.append("language", language.join(", "))
-  //     movieFormData.append("genre", genre.join(", "))
-  //     // movieFormData.append("genre", JSON.stringify(genre))
-  //     movieFormData.append("poster", moviePoster[0])
-
-  //     // Append actor images
-  //     actors.forEach((actor) => {
-  //       movieFormData.append("actorImages", actor.image)
-  //     })
-  //     crew.forEach((crew) => {
-  //       movieFormData.append("crewImages", crew.image)
-  //     })
-
-  //     // Append actor details
-  //     movieFormData.append("actors", JSON.stringify(actors.map((actor) => ({ name: actor.name }))))
-  //     movieFormData.append("crew", JSON.stringify(crew.map((crew) => ({ name: crew.name, role: crew.role }))))
-
-  //     console.log({ movieFormData })
-
-  //     let data = await addNewMovie(movieFormData)
-  //     console.log({ data })
-  //     console.log(directorImage)
-  //     movieNotification = notify.success(`New movie ${e.target.movie.value} added successfully.`)
-  //   } catch (error) {
-  //     console.error(error)
-  //     movieNotification = notify.danger(error)
-  //   }
-  // }
   const onSubmit = async (e) => {
     try {
       movieNotification.close()
@@ -125,6 +77,8 @@
       const data = await addNewMovie(formData)
       console.log({ data })
       movieNotification = notify.success(`New movie ${e.target.movie.value} added successfully.`)
+      push("/Movies/MoviesList")
+
     } catch (error) {
       console.error(error)
       movieNotification = notify.danger(error)
