@@ -3,6 +3,7 @@
   import { onMount } from "svelte"
   import axios from "axios"
   import notify from "../shared/Notification/script/notify"
+  import { push } from "svelte-spa-router"
 
   let moviesList = []
   let showloading = true
@@ -50,14 +51,22 @@
       }
     })
   }
+
+  const clickMovieCard = (e) => {
+    try {
+      push(`/Movies/MovieDetails?id=${e.detail}`)
+    } catch (error) {
+      notify.danger(error)
+    }
+  }
 </script>
 
 <div class="relative z-10 flex h-screen w-screen justify-center overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black">
   <div class="flex w-full justify-start">
     <div class="w-full overflow-auto p-10">
-      <div class="mx-auto ">
+      <div class="mx-auto">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <MovieDetails {moviesList} on:movieClick={(e)=>console.log(e.detail)}/>
+          <MovieDetails {moviesList} on:movieClick={clickMovieCard} />
         </div>
       </div>
     </div>
