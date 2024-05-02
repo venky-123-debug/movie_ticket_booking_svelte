@@ -202,7 +202,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Certification</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" required="true" name="description" type="text" value="U/A" class="formInput" placeholder="Enter movie description" />
+                  <input autocomplete="off" required="true" name="description" type="text" value="U/A" class="formInput" placeholder="Enter movie certification" />
                 </div>
               </div>
 

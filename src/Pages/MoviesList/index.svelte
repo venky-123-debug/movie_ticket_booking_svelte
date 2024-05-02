@@ -57,7 +57,7 @@
     <div class="w-full overflow-auto p-10">
       <div class="mx-auto ">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <MovieDetails {moviesList} />
+          <MovieDetails {moviesList} on:movieClick={(e)=>console.log(e.detail)}/>
         </div>
       </div>
     </div>
