@@ -23,6 +23,7 @@
 
   let actorsModal = false
   let crewModal = false
+  let showloading = false
   let language = []
   let Actions = ["English", "Tamil", "Telugu", "Hindi", "Malayalam", "Kannada"]
   let genreActions = ["Action", "Romance", "Adventure", "Comedy", "Crime and mystery", "Fantasy", "Historical", "Horror"]
@@ -41,6 +42,7 @@
       if (!actors.length) throw "Add at least one actor details"
       if (!moviePoster.length) throw "Movie poster cannot be empty"
 
+      showloading = true
       const formData = new FormData()
 
       // Non-file inputs
@@ -78,10 +80,11 @@
       console.log({ data })
       movieNotification = notify.success(`New movie ${e.target.movie.value} added successfully.`)
       push("/Movies/MoviesList")
-
     } catch (error) {
       console.error(error)
       movieNotification = notify.danger(error)
+    } finally {
+      showloading = false
     }
   }
 
@@ -305,11 +308,20 @@
             </div>
           </div>
 
-          <div class="flex items-center justify-end gap-3">
-            <button type="submit" class="w-28 rounded-md bg-blue-500 py-2 text-sm font-medium text-white hover:bg-blue-600 active:bg-blue-500">
-              <i class="fa-solid fa-camera-movie" />
-              &nbsp;Add Movie
-            </button>
+          <div class="flex h-10 items-center justify-end gap-3">
+            {#if showloading}
+              <span class="text-white">Adding&nbsp;</span>
+              <svg width="20" height="7" stroke="#8087BD" fill="#8087BD" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
+                <circle class="circle" cx="15" cy="15" r="15" />
+                <circle class="circle1" cx="60" cy="15" r="9" fill-opacity="0.9" />
+                <circle class="circle2" cx="105" cy="15" r="15" />
+              </svg>
+            {:else}
+              <button type="submit" class="w-28 rounded-md bg-blue-500 py-2 text-sm font-medium text-white hover:bg-blue-600 active:bg-blue-500">
+                <i class="fa-solid fa-camera-movie" />
+                &nbsp;Add Movie
+              </button>
+            {/if}
           </div>
         </form>
       </div>
