@@ -37,6 +37,50 @@
     console.log({ actors, language }, !actors.length)
   }
 
+  // const onSubmit = async (e) => {
+  //   try {
+  //     movieNotification.close()
+  //     if (!language.length) throw "Language cannot be empty"
+  //     if (!genre.length) throw "Genre cannot be empty"
+  //     if (!actors.length) throw "Add at least one actor details"
+  //     if (!moviePoster.length) throw "Movie poster cannot be empty"
+
+  //     const movieFormData = new FormData()
+
+  //     // Add non-file inputs to FormData
+  //     movieFormData.append("title", e.target.movie.value)
+  //     movieFormData.append("description", e.target.description.value)
+  //     movieFormData.append("releaseDate", e.target.releaseDate.value)
+  //     movieFormData.append("duration", e.target.duration.value)
+
+  //     movieFormData.append("language", language.join(", "))
+  //     movieFormData.append("genre", genre.join(", "))
+  //     // movieFormData.append("genre", JSON.stringify(genre))
+  //     movieFormData.append("poster", moviePoster[0])
+
+  //     // Append actor images
+  //     actors.forEach((actor) => {
+  //       movieFormData.append("actorImages", actor.image)
+  //     })
+  //     crew.forEach((crew) => {
+  //       movieFormData.append("crewImages", crew.image)
+  //     })
+
+  //     // Append actor details
+  //     movieFormData.append("actors", JSON.stringify(actors.map((actor) => ({ name: actor.name }))))
+  //     movieFormData.append("crew", JSON.stringify(crew.map((crew) => ({ name: crew.name, role: crew.role }))))
+
+  //     console.log({ movieFormData })
+
+  //     let data = await addNewMovie(movieFormData)
+  //     console.log({ data })
+  //     console.log(directorImage)
+  //     movieNotification = notify.success(`New movie ${e.target.movie.value} added successfully.`)
+  //   } catch (error) {
+  //     console.error(error)
+  //     movieNotification = notify.danger(error)
+  //   }
+  // }
   const onSubmit = async (e) => {
     try {
       movieNotification.close()
@@ -45,36 +89,41 @@
       if (!actors.length) throw "Add at least one actor details"
       if (!moviePoster.length) throw "Movie poster cannot be empty"
 
-      const movieFormData = new FormData()
+      const formData = new FormData()
 
-      // Add non-file inputs to FormData
-      movieFormData.append("title", e.target.movie.value)
-      movieFormData.append("description", e.target.description.value)
-      movieFormData.append("releaseDate", e.target.releaseDate.value)
-      movieFormData.append("duration", e.target.duration.value)
+      // Non-file inputs
+      const nonFileInputs = {
+        title: e.target.movie.value,
+        description: e.target.description.value,
+        releaseDate: e.target.releaseDate.value,
+        duration: e.target.duration.value,
+        language: language.join(", "),
+        genre: genre.join(", "),
+        poster: moviePoster[0],
+      }
 
-      movieFormData.append("language", language.join(", "))
-      movieFormData.append("genre", genre.join(", "))
-      // movieFormData.append("genre", JSON.stringify(genre))
-      movieFormData.append("poster", moviePoster[0])
-
-      // Append actor images
-      actors.forEach((actor) => {
-        movieFormData.append("actorImages", actor.image)
-      })
-      crew.forEach((crew) => {
-        movieFormData.append("crewImages", crew.image)
+      // Append non-file inputs to FormData
+      Object.entries(nonFileInputs).forEach(([key, value]) => {
+        formData.append(key, value)
       })
 
-      // Append actor details
-      movieFormData.append("actors", JSON.stringify(actors.map((actor) => ({ name: actor.name }))))
-      movieFormData.append("crew", JSON.stringify(crew.map((crew) => ({ name: crew.name, role: crew.role }))))
+      // Append actor images and details
+      actors.forEach((actor, index) => {
+        formData.append(`actorImages`, actor.image)
+        formData.append(`actors[${index}][name]`, actor.name)
+      })
 
-      console.log({ movieFormData })
+      // Append crew images and details
+      crew.forEach((crewMember, index) => {
+        formData.append(`crewImages`, crewMember.image)
+        formData.append(`crew[${index}][name]`, crewMember.name)
+        formData.append(`crew[${index}][role]`, crewMember.role)
+      })
 
-      let data = await addNewMovie(movieFormData)
+      console.log({ formData })
+
+      const data = await addNewMovie(formData)
       console.log({ data })
-      console.log(directorImage)
       movieNotification = notify.success(`New movie ${e.target.movie.value} added successfully.`)
     } catch (error) {
       console.error(error)
