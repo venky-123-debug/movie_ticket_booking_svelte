@@ -50,7 +50,7 @@
           <p class="text-md flex text-white">Rating: 9.0/10</p>
           <div class="flex items-end w-full gap-3">
             <Button on:click={() => push("/Movies/MoviesList")} additionalClass={"bg-red-500 hover:bg-red-600 active:bg-red-500"} text="Back" />
-            <Button on:click={()=>push("/Movies/EditMovie")} additionalClass={"bg-blue-500 hover:bg-blue-600 active:bg-blue-500"} text="Edit" />
+            <Button on:click={()=>push(`/Movies/EditMovie?id=${list.movieId}`)} additionalClass={"bg-blue-500 hover:bg-blue-600 active:bg-blue-500"} text="Edit" />
           </div>
         </div>
       </div>

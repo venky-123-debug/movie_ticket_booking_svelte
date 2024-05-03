@@ -3,7 +3,7 @@
   const dispatch = createEventDispatcher()
   let openModal = false
   let dropdown
-  let activeItems = []
+  export let activeItems = []
   export let Actions
   export let title = "Language"
   const removeActiveItem = (activeItem, index) => {
