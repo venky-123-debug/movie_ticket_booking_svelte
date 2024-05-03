@@ -4,12 +4,12 @@
 
   export let actorDetails = []
   export let role = "Actor"
+  export let apiImage = false
   console.log({ actorDetails })
   const deleteActor = (index) => {
     actorDetails = actorDetails.filter((actor, i) => i !== index)
     actorDetails = [...actorDetails]
-    console.log({actorDetails});
-
+    console.log({ actorDetails })
   }
 </script>
 
@@ -21,7 +21,7 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div class="flex min-w-max flex-col items-center">
             <div>
-              <img class="inline-block aspect-square h-20 w-20 min-w-fit rounded-md" src={actor.imageBlob} alt="" />
+              <img class="inline-block aspect-square h-20 w-20 min-w-fit rounded-md" src={apiImage ? `bookApi/files/${actor.image}` : actor.imageBlob} alt="" />
             </div>
             <div class="">
               <p class="text-sm font-semibold text-gray-700 group-hover:text-gray-900">{actor.name}</p>
