@@ -66,7 +66,7 @@
     <div class="w-full overflow-auto p-10">
       <div class="mx-auto">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <MovieDetails {moviesList} on:movieClick={clickMovieCard} />
+          <MovieDetails  {moviesList} on:movieClick={clickMovieCard} />
         </div>
       </div>
     </div>
