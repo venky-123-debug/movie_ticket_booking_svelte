@@ -16,6 +16,7 @@
     try {
       let data = await movieDetail(query.id)
       imageDetails = data.data
+      console.log({imageDetails});
     } catch (error) {
       console.error(error)
       notify.danger(error)
@@ -36,8 +37,9 @@
   }
 </script>
 
+<!-- <svelte:head title={imageDetails.title}/> -->
 <div class="relative z-10 flex h-screen w-screen justify-center overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black">
-  <div class="flex w-full justify-start">
+  <div class="flex flex-col gap-6 w-full justify-start ">
     <div class="w-full overflow-auto p-10">
       <OverallCard bind:list={imageDetails} />
     </div>
