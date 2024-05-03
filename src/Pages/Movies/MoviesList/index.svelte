@@ -2,7 +2,7 @@
   import MovieDetails from "./Components/movieDetails.svelte"
   import { onMount } from "svelte"
   import axios from "axios"
-  import notify from "../shared/Notification/script/notify"
+  import notify from "../../shared/Notification/script/notify"
   import { push } from "svelte-spa-router"
 
   let moviesList = []

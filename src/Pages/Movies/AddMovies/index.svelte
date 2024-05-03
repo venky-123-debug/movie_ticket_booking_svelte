@@ -1,12 +1,11 @@
 <script>
   import axios from "axios"
   import { push } from "svelte-spa-router"
-  import { formdata2json } from "../Scripts/utilities"
-  import Upload from "../shared/upload.svelte"
-  import notify from "../shared/Notification/script/notify"
-  import AddItem from "../shared/addItem.svelte"
+  import Upload from "../../shared/upload.svelte"
+  import notify from "../../shared/Notification/script/notify"
+  import AddItem from "../../shared/addItem.svelte"
   import ViewModal from "./ActorsList/viewModal.svelte"
-  import ApplicationState from "../../stores/applicationStates"
+  import ApplicationState from "../../../stores/applicationStates"
 
   let moviePoster
   let blob

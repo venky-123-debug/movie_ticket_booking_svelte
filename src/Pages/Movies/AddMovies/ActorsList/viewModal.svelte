@@ -1,6 +1,6 @@
 <script>
-  import Button from "../../shared/Button.svelte"
-  import Modal from "../../shared/Modals/index.svelte"
+  import Button from "../../../shared/Button.svelte"
+  import Modal from "../../../shared/Modals/index.svelte"
 
   export let actorDetails = []
   export let role = "Actor"

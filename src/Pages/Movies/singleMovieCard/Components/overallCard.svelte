@@ -1,5 +1,5 @@
 <script>
-  import Button from "../../shared/Button.svelte"
+  import Button from "../../../shared/Button.svelte"
   import ImageList from "./imageList.svelte"
   import {push} from "svelte-spa-router"
 

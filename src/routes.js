@@ -1,8 +1,8 @@
 import ErrorCode404 from "./Pages/404/index.svelte"
 import Login from "./Pages/Login/index.svelte"
-import AddNewMovie from "./Pages/AddMovies/index.svelte"
-import MoviesList from "./Pages/MoviesList/index.svelte"
-import MovieDetails from "./Pages/singleMovieCard/index.svelte"
+import AddNewMovie from "./Pages/Movies/AddMovies/index.svelte"
+import MoviesList from "./Pages/Movies/MoviesList/index.svelte"
+import MovieDetails from "./Pages/Movies/singleMovieCard/index.svelte"
 
 export default {
   "/": Login,

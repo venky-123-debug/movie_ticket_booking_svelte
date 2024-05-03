@@ -1,9 +1,9 @@
 <script>
   import { onMount } from "svelte"
-  import { queryStringToJSON } from "../Scripts/queryString"
+  import { queryStringToJSON } from "../../Scripts/queryString"
   import axios from "axios"
   import { querystring } from "svelte-spa-router"
-  import notify from "../shared/Notification/script/notify"
+  import notify from "../../shared/Notification/script/notify"
   import OverallCard from "./Components/overallCard.svelte"
 
   let imageDetails = {}
