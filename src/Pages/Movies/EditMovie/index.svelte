@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte"
+  import { onMount, afterUpdate } from "svelte"
   import { queryStringToJSON } from "../../Scripts/queryString"
   import axios from "axios"
   import { querystring } from "svelte-spa-router"
@@ -51,14 +51,23 @@
   }
 
   const onSubmit = () => {}
-  const filteredGenreActions = () => {
-    if (movieData && movieData.genre) {
-      genreActions = genreActions.filter((action) => !movieData.genre.split(",").includes(action))
-      genreActions = [...genreActions]
+  const filteredGenreActions = async (data, arrayList) => {
+    if (data) {
+      const list = data.split(",")
+      for (const item of list) {
+        const index = arrayList.indexOf(item.trim())
+        if (index !== -1) {
+          arrayList.splice(index, 1)
+        }
+      }
+      console.log({ arrayList })
     }
   }
 
-  $: filteredGenreActions()
+  afterUpdate(async () => {
+    await filteredGenreActions(movieData.genre, genreActions)
+    await filteredGenreActions(movieData.language, Actions)
+  })
 </script>
 
 {#if Object.keys(movieData).length}
@@ -85,7 +94,7 @@
                   <div class="formLabel">Genre</div>
                   <div class="sm:col-span-2 sm:mt-0">
                     <AddItem
-                      Actions={genreActions}
+                      bind:Actions={genreActions}
                       activeItems={movieData.genre.split(",")}
                       on:dropdown={(e) => {
                         genre = e.detail
