@@ -52,6 +52,13 @@ module.exports = {
             fontWeight: "500",
           },
         ],
+        buttonText: [
+          "14px",
+          {
+            lineHeight: "22px",
+            fontWeight: "400",
+          },
+        ],
       },
       colors: {
         primary: "#FF6A00",
