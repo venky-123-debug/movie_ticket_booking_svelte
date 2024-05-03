@@ -12,11 +12,11 @@
     if (actionIndex === -1) {
       // If not present, remove from activeItems and add to Actions
       activeItems.splice(index, 1)
-      Actions.push(activeItem)
+      Actions.unshift(activeItem)
     } else {
       // If present, remove from Actions and add back to activeItems
       Actions.splice(actionIndex, 1)
-      activeItems.push(activeItem)
+      activeItems.unshift(activeItem)
     }
     // Update both arrays
     activeItems = [...activeItems]
@@ -50,7 +50,7 @@
       {#if activeItems.length}
         {#each activeItems as activeItem, i}
           <div class="">
-            <button on:click|self={() => removeActiveItem(activeItem, i)} type="button" class="rounded-md bg-blue-500 px-2 py-[0.4px] text-sm text-white">{activeItem}</button>
+            <button on:click|self|preventDefault|stopPropagation={() => removeActiveItem(activeItem, i)} type="button" class="rounded-md bg-blue-500 px-2 py-[0.4px] text-sm text-white">{activeItem}</button>
           </div>
         {/each}
       {:else}

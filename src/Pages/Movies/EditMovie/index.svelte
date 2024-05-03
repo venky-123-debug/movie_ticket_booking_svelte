@@ -26,6 +26,8 @@
       let data = await movieDetail(query.id)
       movieData = data.data
       console.log({ movieData })
+      await filteredGenreActions(movieData.genre, genreActions)
+      await filteredGenreActions(movieData.language, Actions)
     } catch (error) {
       console.error(error)
       notify.danger(error)
@@ -64,10 +66,9 @@
     }
   }
 
-  afterUpdate(async () => {
-    await filteredGenreActions(movieData.genre, genreActions)
-    await filteredGenreActions(movieData.language, Actions)
-  })
+  // afterUpdate(async () => {
+
+  // })
 </script>
 
 {#if Object.keys(movieData).length}
@@ -84,10 +85,11 @@
                     <input autocomplete="off" required="true" name="movie" type="text" value={movieData.title} class="formInput" placeholder="Enter movie name" />
                   </div>
                 </div>
-                <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
+                <div class="sm:grid sm:grid-cols-3 sm:items-start">
                   <div class="formLabel">Movie Description</div>
                   <div class="sm:col-span-2 sm:mt-0">
-                    <input autocomplete="off" required="true" name="description" type="text" value={movieData.description} class="formInput" placeholder="Enter movie description" />
+                    <!-- <input autocomplete="off" required="true" name="description" type="text" value={movieData.description} class="formInput" placeholder="Enter movie description" /> -->
+                    <textarea autocomplete="off" required="true" name="description" type="text" value={movieData.description} class="formInput max-h-[200px] min-h-[40px]" placeholder="Enter movie description" />
                   </div>
                 </div>
                 <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
@@ -142,34 +144,7 @@
                   </div>
                 </div>
 
-                <div class="flex items-center gap-3 text-2xl font-bold text-blue-500">
-                  Crew Details&nbsp;:&nbsp
-                  <!-- <div class="relative">
-                  <button
-                    type="button"
-                    on:click|preventDefault={(e) => {
-                      try {
-                        if (!crew.length) throw "Add atleast one crew member details"
-                        crewModal = !crewModal
-                      } catch (error) {
-                        console.error(error)
-                        notify.danger(error)
-                      }
-                    }}
-                    class="text-2xl text-white {crew.length ? 'cursor-pointer' : 'pointer-events-none'} hover:text-blue-500 active:scale-105"
-                  >
-                    <i class="fa-solid fa-circle-info" />
-                  </button>
-                  {#if crew.length}
-                    <div class="absolute top-[-10px] right-[-12px] h-5 w-5 rounded-full bg-green-500 text-center text-xs text-white">
-                      {crew.length}
-                    </div>
-                  {/if}
-                </div>
-                <button type="button" on:click={addCrew} class="text-2xl text-white hover:text-blue-500 active:scale-105">
-                  <i class="fa-solid fa-octagon-plus" />
-                </button> -->
-                </div>
+                <div class="flex items-center gap-3 text-2xl font-bold text-blue-500">Crew Details&nbsp;:&nbsp</div>
                 {#each movieData.crew as crew}
                   <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                     <div class="formLabel">Member Name</div>
@@ -243,7 +218,7 @@
 
             <div class="flex h-10 items-center justify-end gap-3">
               {#if showloading}
-                <span class="text-white">Adding&nbsp;</span>
+                <span class="text-white">Updating&nbsp;</span>
                 <svg width="20" height="7" stroke="#8087BD" fill="#8087BD" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
                   <circle class="circle" cx="15" cy="15" r="15" />
                   <circle class="circle1" cx="60" cy="15" r="9" fill-opacity="0.9" />
@@ -252,7 +227,7 @@
               {:else}
                 <button type="submit" class="w-28 rounded-md bg-blue-500 py-2 text-sm font-medium text-white hover:bg-blue-600 active:bg-blue-500">
                   <i class="fa-solid fa-camera-movie" />
-                  &nbsp;Add Movie
+                  &nbsp;Update
                 </button>
               {/if}
             </div>
