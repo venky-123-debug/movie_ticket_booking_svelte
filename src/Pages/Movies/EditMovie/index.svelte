@@ -37,6 +37,9 @@
   let addActorNotify = {
     close() {},
   }
+  let dateNotify = {
+    close() {},
+  }
   /**
    * The query string parsed as JSON using spa-router.
    * @type {Object}
@@ -51,7 +54,6 @@
       await filteredGenreActions(movieData.language, Actions)
       movieDescription = movieData.description
       releaseDate = movieData.releaseDate.substring(0, 10)
-      // releaseDate = movieData.releaseDate.trim(0, 10)
       language = new Array(movieData.language)
       genre = new Array(movieData.genre)
       actors = movieData.actors
@@ -59,7 +61,7 @@
       if (movieData.poster) await fetchMoviePoster(movieData.poster)
       await createBlobForData(actors)
       await createBlobForData(crew)
-      console.log({releaseDate});
+      console.log({ releaseDate })
     } catch (error) {
       console.error(error)
       notify.danger(error)
@@ -76,7 +78,7 @@
     for (const item of data) {
       const imageUrl = `bookApi/files/${item.image}`
       let blob = await imageUrlToBlob(imageUrl)
-      item.imageBlob =URL.createObjectURL(blob)
+      item.imageBlob = URL.createObjectURL(blob)
       let file = new File([blob], item.image)
       item.image = [file][0]
     }
@@ -107,9 +109,32 @@
     })
   }
 
-  // Function to handle changes in the releaseDate input
   const handleReleaseDateChange = (e) => {
-    movieData.releaseDate = e.target.value
+    dateNotify.close()
+    let oldDate = movieData.releaseDate.substring(0, 10)
+    try {
+      console.log(releaseDate)
+
+      const selectedDate = new Date(e.target.value)
+      const today = new Date()
+
+      // Set hours, minutes, seconds, and milliseconds to 0 to compare only dates
+      today.setHours(0, 0, 0, 0)
+
+      if (selectedDate <= today) {
+        // Throw an error if the selected date is less than or equal to today's date
+        throw "Release date must be after today's date."
+      }
+
+      // If the selected date is valid, update the movieData.releaseDate
+      releaseDate = e.target.value
+    } catch (error) {
+      console.error(error)
+      dateNotify = notify.danger(error)
+      e.target.value = oldDate
+    } finally {
+      console.log(releaseDate)
+    }
   }
 
   const filteredGenreActions = async (data, arrayList) => {
@@ -193,8 +218,8 @@
       Object.entries(nonFileInputs).forEach(([key, value]) => {
         formData.append(key, value)
       })
-      
-      console.log({actors,crew})
+
+      console.log({ actors, crew })
       actors.forEach((actor, index) => {
         formData.append(`actorImages`, actor.image)
         formData.append(`actors[${index}][name]`, actor.name)
