@@ -154,10 +154,7 @@
   }
 
   const handleReleaseDateChange = (e) => {
-    // console.log(e.target.value)
-    // return
     dateNotify.close()
-    // let oldDate = releaseDate
     try {
       console.log(releaseDate)
 
@@ -177,7 +174,7 @@
     } catch (error) {
       console.error(error)
       dateNotify = notify.danger(error)
-      e.target.value = "oldDate"
+      e.target.value = ""
     } finally {
       console.log(releaseDate)
     }
