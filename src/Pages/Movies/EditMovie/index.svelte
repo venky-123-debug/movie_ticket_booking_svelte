@@ -50,7 +50,8 @@
       await filteredGenreActions(movieData.genre, genreActions)
       await filteredGenreActions(movieData.language, Actions)
       movieDescription = movieData.description
-      releaseDate = movieData.releaseDate.trim(0, 10)
+      releaseDate = movieData.releaseDate.substring(0, 10)
+      // releaseDate = movieData.releaseDate.trim(0, 10)
       language = new Array(movieData.language)
       genre = new Array(movieData.genre)
       actors = movieData.actors
@@ -58,6 +59,7 @@
       if (movieData.poster) await fetchMoviePoster(movieData.poster)
       await createBlobForData(actors)
       await createBlobForData(crew)
+      console.log({releaseDate});
     } catch (error) {
       console.error(error)
       notify.danger(error)
