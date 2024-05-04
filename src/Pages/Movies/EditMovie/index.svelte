@@ -1,8 +1,8 @@
 <script>
+  import axios from "axios"
+  import { querystring,push } from "svelte-spa-router"
   import { onMount } from "svelte"
   import { queryStringToJSON } from "../../Scripts/queryString"
-  import axios from "axios"
-  import { querystring } from "svelte-spa-router"
   import notify from "../../shared/Notification/script/notify"
   import AddItem from "../../shared/addItem.svelte"
   import Upload from "../../shared/upload.svelte"
@@ -49,16 +49,28 @@
       await filteredGenreActions(movieData.genre, genreActions)
       await filteredGenreActions(movieData.language, Actions)
       releaseDate = movieData.releaseDate.trim(0, 10)
-      language = Array.from(movieData.language)
-      genre =Array.from(movieData.genre)
+      language = new Array(movieData.language)
+      genre = new Array(movieData.genre)
       actors = movieData.actors
       crew = movieData.crew
+      if (movieData.poster) await fetchMoviePoster(movieData.poster)
       // moviePoster = movieData.poster
     } catch (error) {
       console.error(error)
       notify.danger(error)
     }
   })
+
+  const fetchMoviePoster = async (poster) => {
+    try {
+      const response = await axios.get(`/bookApi/files/${poster}`, { responseType: "blob" })
+      const blob = response.data
+      const file = new File([blob], poster)
+      moviePoster = [file]
+    } catch (error) {
+      console.error("Error fetching movie poster:", error)
+    }
+  }
 
   const movieDetail = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -141,7 +153,6 @@
       if (!genre.length) throw "Genre cannot be empty"
       if (!actors.length) throw "Add at least one actor details"
       // if (!moviePoster.length) throw "Movie poster cannot be empty"
-      console.log({ language, genre })
       showloading = true
       const formData = new FormData()
 
@@ -156,6 +167,8 @@
         poster: moviePoster[0],
       }
 
+      console.log({ nonFileInputs })
+      // return
       // Append non-file inputs to FormData
       Object.entries(nonFileInputs).forEach(([key, value]) => {
         formData.append(key, value)
@@ -192,7 +205,7 @@
     return new Promise(async (resolve, reject) => {
       try {
         if (!window.navigator.onLine) reject("Network error")
-        let { data } = await axios.patch(`/bookApi/movie?id=${id}`, inputData, {
+        let { data } = await axios.patch(`/bookApi/movie/${id}`, inputData, {
           headers: {
             "Content-Type": "multipart/form-data",
             "access-token": $ApplicationState.token,
