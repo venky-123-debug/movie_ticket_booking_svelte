@@ -75,7 +75,10 @@
   const createBlobForData = async (data) => {
     for (const item of data) {
       const imageUrl = `bookApi/files/${item.image}`
-      item.imageBlob =URL.createObjectURL(await imageUrlToBlob(imageUrl))
+      let blob = await imageUrlToBlob(imageUrl)
+      item.imageBlob =URL.createObjectURL(blob)
+      let file = new File([blob], item.image)
+      item.image = [file][0]
     }
     console.log({ data })
   }
@@ -190,7 +193,8 @@
       Object.entries(nonFileInputs).forEach(([key, value]) => {
         formData.append(key, value)
       })
-
+      
+      console.log({actors,crew})
       actors.forEach((actor, index) => {
         formData.append(`actorImages`, actor.image)
         formData.append(`actors[${index}][name]`, actor.name)
