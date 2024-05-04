@@ -27,7 +27,7 @@
   $: uploadImage(files)
 </script>
 
-<div class="relative flex {height} cursor-pointer flex-col items-center justify-center gap-3 {radius} {!blob ? 'border border-dashed hover:border-gray-200' : ''} border-borderClr bg-transparent">
+<div class="relative flex {height} flex-col items-center justify-center gap-3 {radius} {!blob ? 'border border-dashed hover:border-gray-200' : ''} border-borderClr bg-transparent">
   {#if loading}
     <div class="absolute inset-0 flex h-full w-full items-center justify-center {radius} bg-opacity-50 bg-blue-500">
       <i class="fa-sharp fa-solid fa-circle-notch fa-spin flex h-8 w-8 items-center justify-center {radius}  text-white" />

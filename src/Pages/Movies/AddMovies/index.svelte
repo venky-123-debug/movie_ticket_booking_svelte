@@ -49,6 +49,7 @@
         title: e.target.movie.value,
         description: e.target.description.value,
         releaseDate: e.target.releaseDate.value,
+        Certification: e.target.Certification.value,
         duration: e.target.duration.value,
         language: language.join(", "),
         genre: genre.join(", "),
@@ -201,7 +202,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Certification</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" required="true" name="description" type="text" value="U/A" class="formInput" placeholder="Enter movie certification" />
+                  <input autocomplete="off" required="true" name="Certification" type="text" value="U/A" class="formInput" placeholder="Enter movie certification" />
                 </div>
               </div>
 

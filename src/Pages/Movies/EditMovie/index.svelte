@@ -15,7 +15,7 @@
 
   let blob
   let crewBlob = ""
-  let movieDescription 
+  let movieDescription
   let releaseDate
   let showloading = false
   let actorsModal = false
@@ -56,21 +56,25 @@
       actors = movieData.actors
       crew = movieData.crew
       if (movieData.poster) await fetchMoviePoster(movieData.poster)
-    
     } catch (error) {
       console.error(error)
       notify.danger(error)
     }
   })
 
+  $:{
+    console.log({moviePoster});
+  }
+
   const fetchMoviePoster = async (poster) => {
     try {
-      const response = await axios.get(`/bookApi/files/${poster}`, { responseType: "blob" })
-      const blob = response.data
-      const file = new File([blob], poster)
+      let response = await axios.get(`/bookApi/files/${poster}`, { responseType: "blob" })
+      let blob = response.data
+      let file = new File([blob], poster)
       moviePoster = [file]
+      console.log({moviePoster});
     } catch (error) {
-      console.error("Error fetching movie poster:", error)
+      console.error(error)
     }
   }
 
@@ -167,6 +171,7 @@
   const onSubmit = async (e) => {
     try {
       movieNotification.close()
+      console.log({moviePoster});
       if (!language.length) throw "Language cannot be empty"
       if (!genre.length) throw "Genre cannot be empty"
       if (!actors.length) throw "Add at least one actor details"
@@ -179,6 +184,7 @@
         title: e.target.movie.value,
         description: movieDescription,
         releaseDate: e.target.releaseDate.value,
+        Certification: e.target.Certification.value,
         duration: e.target.duration.value,
         language: language.join(", "),
         genre: genre.join(", "),
@@ -198,7 +204,6 @@
         formData.append(`crew[${index}][name]`, crewMember.name)
         formData.append(`crew[${index}][role]`, crewMember.role)
       })
-
 
       const data = await updateMovie(formData, query.id)
       console.log({ data })
@@ -281,13 +286,13 @@
                 <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                   <div class="formLabel">Duration</div>
                   <div class="sm:col-span-2 sm:mt-0">
-                    <input autocomplete="off" required="true" name="duration" type="number" value={movieData.duration} class="formInput" placeholder="Enter movie description" />
+                    <input autocomplete="off" required="true" name="duration" type="number" bind:value={movieData.duration} class="formInput" placeholder="Enter movie description" />
                   </div>
                 </div>
                 <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                   <div class="formLabel">Certification</div>
                   <div class="sm:col-span-2 sm:mt-0">
-                    <input autocomplete="off" required="true" name="description" type="text" value={movieData.certification} class="formInput" placeholder="Enter movie certification" />
+                    <input autocomplete="off" required="true" name="Certification" type="text" bind:value={movieData.Certification} class="formInput" placeholder="Enter movie certification" />
                   </div>
                 </div>
 
