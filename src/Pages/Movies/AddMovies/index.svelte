@@ -336,8 +336,6 @@
   </div>
   {#if actorsModal}
     <ViewModal
-    apiImage={false}
-
       bind:actorDetails={actors}
       on:click={() => {
         actorsModal = !actorsModal
@@ -346,7 +344,6 @@
   {/if}
   {#if crewModal}
     <ViewModal
-    apiImage={false}
       bind:actorDetails={crew}
       on:click={() => {
         crewModal = !crewModal

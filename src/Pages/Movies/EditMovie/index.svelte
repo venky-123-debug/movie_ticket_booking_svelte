@@ -56,14 +56,26 @@
       actors = movieData.actors
       crew = movieData.crew
       if (movieData.poster) await fetchMoviePoster(movieData.poster)
+      await createBlobForData(actors)
+      await createBlobForData(crew)
     } catch (error) {
       console.error(error)
       notify.danger(error)
     }
   })
 
-  $:{
-    console.log({moviePoster});
+  const imageUrlToBlob = async (imageUrl) => {
+    const response = await axios.get(imageUrl, { responseType: "blob" })
+    return response.data
+  }
+
+  // Function to create blob for each actor using Axios
+  const createBlobForData = async (data) => {
+    for (const item of data) {
+      const imageUrl = `bookApi/files/${item.image}`
+      item.imageBlob =URL.createObjectURL(await imageUrlToBlob(imageUrl))
+    }
+    console.log({ data })
   }
 
   const fetchMoviePoster = async (poster) => {
@@ -72,28 +84,11 @@
       let blob = response.data
       let file = new File([blob], poster)
       moviePoster = [file]
-      console.log({moviePoster});
+      console.log({ moviePoster })
     } catch (error) {
       console.error(error)
     }
   }
-
-  // const fetchImages = async (actors) => {
-  //   try {
-  //     const actorImages = await Promise.all(
-  //       actors.map(async (actor) => {
-  //         const response = await axios.get(`/bookApi/files/${actor.image}`, { responseType: "blob" })
-  //         const imageBlob = response.data
-  //         return new File([imageBlob], actor.image)
-  //       })
-  //     )
-  //     actors = actorImages
-  //     return actors
-  //   } catch (error) {
-  //     console.error(error)
-  //     return []
-  //   }
-  // }
   const movieDetail = (id) => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -171,7 +166,7 @@
   const onSubmit = async (e) => {
     try {
       movieNotification.close()
-      console.log({moviePoster});
+      console.log({ moviePoster })
       if (!language.length) throw "Language cannot be empty"
       if (!genre.length) throw "Genre cannot be empty"
       if (!actors.length) throw "Add at least one actor details"
@@ -425,7 +420,6 @@
     </div>
     {#if actorsModal}
       <ViewModal
-        apiImage={true}
         bind:actorDetails={movieData.actors}
         on:click={() => {
           actorsModal = !actorsModal
@@ -434,7 +428,6 @@
     {/if}
     {#if crewModal}
       <ViewModal
-        apiImage={true}
         bind:actorDetails={movieData.crew}
         on:click={() => {
           crewModal = !crewModal
