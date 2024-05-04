@@ -1,6 +1,6 @@
 <script>
   import axios from "axios"
-  import { querystring,push } from "svelte-spa-router"
+  import { querystring, push } from "svelte-spa-router"
   import { onMount } from "svelte"
   import { queryStringToJSON } from "../../Scripts/queryString"
   import notify from "../../shared/Notification/script/notify"
@@ -15,6 +15,7 @@
 
   let blob
   let crewBlob = ""
+  let movieDescription 
   let releaseDate
   let showloading = false
   let actorsModal = false
@@ -48,13 +49,14 @@
       console.log({ movieData })
       await filteredGenreActions(movieData.genre, genreActions)
       await filteredGenreActions(movieData.language, Actions)
+      movieDescription = movieData.description
       releaseDate = movieData.releaseDate.trim(0, 10)
       language = new Array(movieData.language)
       genre = new Array(movieData.genre)
       actors = movieData.actors
       crew = movieData.crew
       if (movieData.poster) await fetchMoviePoster(movieData.poster)
-      // moviePoster = movieData.poster
+    
     } catch (error) {
       console.error(error)
       notify.danger(error)
@@ -72,6 +74,22 @@
     }
   }
 
+  // const fetchImages = async (actors) => {
+  //   try {
+  //     const actorImages = await Promise.all(
+  //       actors.map(async (actor) => {
+  //         const response = await axios.get(`/bookApi/files/${actor.image}`, { responseType: "blob" })
+  //         const imageBlob = response.data
+  //         return new File([imageBlob], actor.image)
+  //       })
+  //     )
+  //     actors = actorImages
+  //     return actors
+  //   } catch (error) {
+  //     console.error(error)
+  //     return []
+  //   }
+  // }
   const movieDetail = (id) => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -152,46 +170,39 @@
       if (!language.length) throw "Language cannot be empty"
       if (!genre.length) throw "Genre cannot be empty"
       if (!actors.length) throw "Add at least one actor details"
-      // if (!moviePoster.length) throw "Movie poster cannot be empty"
+      if (!moviePoster.length) throw "Movie poster cannot be empty"
       showloading = true
       const formData = new FormData()
 
       // Non-file inputs
       const nonFileInputs = {
         title: e.target.movie.value,
-        description: e.target.description.value,
+        description: movieDescription,
         releaseDate: e.target.releaseDate.value,
         duration: e.target.duration.value,
         language: language.join(", "),
         genre: genre.join(", "),
         poster: moviePoster[0],
       }
-
-      console.log({ nonFileInputs })
-      // return
-      // Append non-file inputs to FormData
       Object.entries(nonFileInputs).forEach(([key, value]) => {
         formData.append(key, value)
       })
 
-      // Append actor images and details
       actors.forEach((actor, index) => {
         formData.append(`actorImages`, actor.image)
         formData.append(`actors[${index}][name]`, actor.name)
       })
 
-      // Append crew images and details
       crew.forEach((crewMember, index) => {
         formData.append(`crewImages`, crewMember.image)
         formData.append(`crew[${index}][name]`, crewMember.name)
         formData.append(`crew[${index}][role]`, crewMember.role)
       })
 
-      console.log({ formData })
 
       const data = await updateMovie(formData, query.id)
       console.log({ data })
-      movieNotification = notify.success(`New movie ${e.target.movie.value} added successfully.`)
+      movieNotification = notify.success(`Movie ${e.target.movie.value} details updated successfully.`)
       push("/Movies/MoviesList")
     } catch (error) {
       console.error(error)
@@ -231,14 +242,14 @@
                 <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                   <div class="formLabel">Movie Name</div>
                   <div class="sm:col-span-2 sm:mt-0">
-                    <input autocomplete="off" required="true" name="movie" type="text" value={movieData.title} class="formInput" placeholder="Enter movie name" />
+                    <input autocomplete="off" required="true" name="movie" type="text" bind:value={movieData.title} class="formInput" placeholder="Enter movie name" />
                   </div>
                 </div>
                 <div class="sm:grid sm:grid-cols-3 sm:items-start">
                   <div class="formLabel">Movie Description</div>
                   <div class="sm:col-span-2 sm:mt-0">
                     <!-- <input autocomplete="off" required="true" name="description" type="text" value={movieData.description} class="formInput" placeholder="Enter movie description" /> -->
-                    <textarea autocomplete="off" required="true" name="description" type="text" value={movieData.description} class="formInput max-h-[200px] min-h-[40px]" placeholder="Enter movie description" />
+                    <textarea autocomplete="off" required="true" name="description" type="text" bind:value={movieDescription} class="formInput max-h-[200px] min-h-[40px]" placeholder="Enter movie description" />
                   </div>
                 </div>
                 <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
