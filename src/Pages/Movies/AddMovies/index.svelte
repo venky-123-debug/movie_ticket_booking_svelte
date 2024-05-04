@@ -166,7 +166,8 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Movie Description</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" required="true" name="description" type="text" value="Good Movie" class="formInput" placeholder="Enter movie description" />
+                  <textarea autocomplete="off" required="true" name="description" type="text" value="Good Movie" class="formInput max-h-[200px] min-h-[40px]" placeholder="Enter movie description" />
+                  <!-- <input autocomplete="off" required="true" name="description" type="text" value="Good Movie" class="formInput" placeholder="Enter movie description" /> -->
                 </div>
               </div>
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
