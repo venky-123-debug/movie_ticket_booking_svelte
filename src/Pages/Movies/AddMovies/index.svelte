@@ -19,6 +19,7 @@
   let crewMemberImage = ""
   let posterBlob = ""
   let crewBlob = ""
+  let releaseDate = ""
 
   let actorsModal = false
   let crewModal = false
@@ -31,6 +32,9 @@
     close() {},
   }
   let addActorNotify = {
+    close() {},
+  }
+  let dateNotify = {
     close() {},
   }
   const onSubmit = async (e) => {
@@ -148,6 +152,36 @@
       addActorNotify = notify.danger(error)
     }
   }
+
+  const handleReleaseDateChange = (e) => {
+    // console.log(e.target.value)
+    // return
+    dateNotify.close()
+    // let oldDate = releaseDate
+    try {
+      console.log(releaseDate)
+
+      const selectedDate = new Date(e.target.value)
+      const today = new Date()
+
+      // Set hours, minutes, seconds, and milliseconds to 0 to compare only dates
+      today.setHours(0, 0, 0, 0)
+
+      if (selectedDate <= today) {
+        // Throw an error if the selected date is less than or equal to today's date
+        throw "Release date must be after today's date."
+      }
+
+      // If the selected date is valid, update the movieData.releaseDate
+      releaseDate = e.target.value
+    } catch (error) {
+      console.error(error)
+      dateNotify = notify.danger(error)
+      e.target.value = "oldDate"
+    } finally {
+      console.log(releaseDate)
+    }
+  }
 </script>
 
 <div class="relative z-10 flex h-screen w-screen justify-center overflow-hidden bg-gradient-to-b from-gray-800 via-gray-900 to-black">
@@ -210,7 +244,7 @@
               <div class="sm:grid sm:grid-cols-3 sm:items-start md:items-center">
                 <div class="formLabel">Release Date</div>
                 <div class="sm:col-span-2 sm:mt-0">
-                  <input autocomplete="off" required="true" name="releaseDate" type="date" class="formInput" placeholder="enter movie release date" />
+                  <input autocomplete="off" required="true" name="releaseDate" type="date" bind:value={releaseDate} on:change={handleReleaseDateChange} class="formInput" placeholder="enter movie release date" />
                 </div>
               </div>
               <div class="sm:grid sm:grid-cols-3 sm:items-start">
